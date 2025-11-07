@@ -1,0 +1,8 @@
+rootProject.name = 'boilerplate-gradle'
+
+// 하위 모듈 정의
+include 'common-events'
+include 'order-service'
+include 'payment-service'
+include 'delivery-service'
+
