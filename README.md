@@ -35,3 +35,15 @@ common-events/
 ## order-service
 
 ## payment-service
+
+
+## Gradle 주요 명령어 비교
+```text
+클린 빌드 ./gradlew clean
+컴파일 ./gradlew compileJava
+테스트 ./gradlew test
+빌드 ./gradlew build
+런 ./gradlew bootRun
+JAR ./gradlew bootJar
+테스트 ./gradlew bootTest
+```
