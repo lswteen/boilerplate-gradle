@@ -1,9 +1,9 @@
-package com.farfarcoder.orderservice.controller;
+package com.farfarcoder.orderservice.presentation.controller;
 
-import com.farfarcoder.orderservice.dto.OrderRequest;
-import com.farfarcoder.orderservice.dto.OrderResponse;
-import com.farfarcoder.orderservice.entity.Order;
-import com.farfarcoder.orderservice.service.OrderService;
+import com.farfarcoder.orderservice.presentation.dto.OrderRequest;
+import com.farfarcoder.orderservice.presentation.dto.OrderResponse;
+import com.farfarcoder.orderservice.persistence.entity.Order;
+import com.farfarcoder.orderservice.business.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

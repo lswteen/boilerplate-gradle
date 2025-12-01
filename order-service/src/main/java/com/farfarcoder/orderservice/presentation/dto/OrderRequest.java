@@ -1,6 +1,6 @@
-package com.farfarcoder.orderservice.dto;
+package com.farfarcoder.orderservice.presentation.dto;
 
-import com.farfarcoder.orderservice.entity.Order;
+import com.farfarcoder.orderservice.persistence.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

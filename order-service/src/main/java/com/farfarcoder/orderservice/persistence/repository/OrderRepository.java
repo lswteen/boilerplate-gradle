@@ -1,6 +1,6 @@
-package com.farfarcoder.orderservice.repository;
+package com.farfarcoder.orderservice.persistence.repository;
 
-import com.farfarcoder.orderservice.entity.Order;
+import com.farfarcoder.orderservice.persistence.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

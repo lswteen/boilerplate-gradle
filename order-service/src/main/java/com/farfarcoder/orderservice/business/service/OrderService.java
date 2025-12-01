@@ -1,9 +1,9 @@
-package com.farfarcoder.orderservice.service;
+package com.farfarcoder.orderservice.business.service;
 
-import com.farfarcoder.orderservice.dto.OrderRequest;
-import com.farfarcoder.orderservice.dto.OrderResponse;
-import com.farfarcoder.orderservice.entity.Order;
-import com.farfarcoder.orderservice.repository.OrderRepository;
+import com.farfarcoder.orderservice.presentation.dto.OrderRequest;
+import com.farfarcoder.orderservice.presentation.dto.OrderResponse;
+import com.farfarcoder.orderservice.persistence.entity.Order;
+import com.farfarcoder.orderservice.persistence.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

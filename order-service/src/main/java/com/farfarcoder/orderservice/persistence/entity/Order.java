@@ -1,4 +1,4 @@
-package com.farfarcoder.orderservice.entity;
+package com.farfarcoder.orderservice.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

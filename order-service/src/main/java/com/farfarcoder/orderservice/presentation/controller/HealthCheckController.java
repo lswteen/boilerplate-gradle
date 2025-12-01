@@ -1,4 +1,4 @@
-package com.farfarcoder.orderservice.controller;
+package com.farfarcoder.orderservice.presentation.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
