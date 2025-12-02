@@ -2,6 +2,8 @@ server:
   port: 7070
 
 spring:
+  application:
+    name: order-service
   docker:
     compose:
       enabled: false

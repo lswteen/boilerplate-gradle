@@ -1,5 +1,5 @@
 # boilerplate-gradle
-boilerplate-gradle java21 spring 3.5.7
+boilerplate-gradle java21 spring 3.5.8
 
 ```text
 boilerplate-gradle/

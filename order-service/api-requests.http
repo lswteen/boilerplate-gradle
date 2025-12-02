@@ -1,0 +1,46 @@
+### Global Variables
+@baseUrl = http://localhost:7070/api/v1/order
+
+### 1. Create a new Order
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "customerName": "John Doe",
+  "productName": "MacBook Pro",
+  "quantity": 1,
+  "price": 2500.00,
+  "status": "PENDING",
+  "description": "Urgent delivery"
+}
+
+### 2. Get All Orders
+GET {{baseUrl}}
+
+### 3. Get Order by ID
+# Replace '1' with an actual ID from the response of "Get All Orders" or "Create Order"
+GET {{baseUrl}}/1
+
+### 4. Update Order
+# Replace '1' with an actual ID
+PUT {{baseUrl}}/1
+Content-Type: application/json
+
+{
+  "customerName": "John Doe",
+  "productName": "MacBook Pro M3",
+  "quantity": 2,
+  "price": 5000.00,
+  "status": "CONFIRMED",
+  "description": "Updated quantity"
+}
+
+### 5. Get Orders by Customer Name
+GET {{baseUrl}}/customer/John Doe
+
+### 6. Get Orders by Status
+GET {{baseUrl}}/status/PENDING
+
+### 7. Delete Order
+# Replace '1' with an actual ID
+DELETE {{baseUrl}}/1
