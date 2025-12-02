@@ -1,14 +1,14 @@
 package com.farfarcoder.orderservice.presentation.dto;
 
-import com.farfarcoder.orderservice.persistence.entity.Order;
+import com.farfarcoder.orderservice.business.model.OrderModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -18,6 +18,6 @@ public class OrderRequest {
     private String productName;
     private Integer quantity;
     private BigDecimal price;
-    private Order.OrderStatus status;
+    private OrderModel.OrderStatus status;
     private String description;
 }

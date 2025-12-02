@@ -1,9 +1,9 @@
 package com.farfarcoder.orderservice.presentation.controller;
 
+import com.farfarcoder.orderservice.business.model.OrderModel;
 import com.farfarcoder.orderservice.presentation.dto.OrderRequest;
 import com.farfarcoder.orderservice.presentation.dto.OrderResponse;
-import com.farfarcoder.orderservice.persistence.entity.Order;
-import com.farfarcoder.orderservice.business.service.OrderService;
+import com.farfarcoder.orderservice.presentation.facade.OrderPresentationFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,70 +16,42 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderService orderService;
+    private final OrderPresentationFacade orderPresentationFacade;
 
-    /**
-     * 전체 주문 조회
-     */
     @GetMapping
     public ResponseEntity<List<OrderResponse>> getAllOrders() {
-        List<OrderResponse> orders = orderService.getAllOrders();
-        return ResponseEntity.ok(orders);
+        return ResponseEntity.ok(orderPresentationFacade.getAllOrders());
     }
 
-    /**
-     * 특정 주문 조회
-     */
     @GetMapping("/{id}")
     public ResponseEntity<OrderResponse> getOrderById(@PathVariable Long id) {
-        OrderResponse order = orderService.getOrderById(id);
-        return ResponseEntity.ok(order);
+        return ResponseEntity.ok(orderPresentationFacade.getOrderById(id));
     }
 
-    /**
-     * 주문 등록
-     */
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest request) {
-        OrderResponse createdOrder = orderService.createOrder(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(orderPresentationFacade.createOrder(request));
     }
 
-    /**
-     * 주문 수정
-     */
     @PutMapping("/{id}")
-    public ResponseEntity<OrderResponse> updateOrder(
-            @PathVariable Long id,
-            @RequestBody OrderRequest request) {
-        OrderResponse updatedOrder = orderService.updateOrder(id, request);
-        return ResponseEntity.ok(updatedOrder);
+    public ResponseEntity<OrderResponse> updateOrder(@PathVariable Long id, @RequestBody OrderRequest request) {
+        return ResponseEntity.ok(orderPresentationFacade.updateOrder(id, request));
     }
 
-    /**
-     * 주문 삭제
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
-        orderService.deleteOrder(id);
+        orderPresentationFacade.deleteOrder(id);
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * 고객명으로 주문 조회
-     */
     @GetMapping("/customer/{customerName}")
     public ResponseEntity<List<OrderResponse>> getOrdersByCustomerName(@PathVariable String customerName) {
-        List<OrderResponse> orders = orderService.getOrdersByCustomerName(customerName);
-        return ResponseEntity.ok(orders);
+        return ResponseEntity.ok(orderPresentationFacade.getOrdersByCustomerName(customerName));
     }
 
-    /**
-     * 상태별 주문 조회
-     */
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<OrderResponse>> getOrdersByStatus(@PathVariable Order.OrderStatus status) {
-        List<OrderResponse> orders = orderService.getOrdersByStatus(status);
-        return ResponseEntity.ok(orders);
+    public ResponseEntity<List<OrderResponse>> getOrdersByStatus(@PathVariable OrderModel.OrderStatus status) {
+        return ResponseEntity.ok(orderPresentationFacade.getOrdersByStatus(status));
     }
 }

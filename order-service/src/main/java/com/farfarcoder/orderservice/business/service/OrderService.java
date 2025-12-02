@@ -1,88 +1,73 @@
 package com.farfarcoder.orderservice.business.service;
 
-import com.farfarcoder.orderservice.presentation.dto.OrderRequest;
-import com.farfarcoder.orderservice.presentation.dto.OrderResponse;
-import com.farfarcoder.orderservice.persistence.entity.Order;
-import com.farfarcoder.orderservice.persistence.repository.OrderRepository;
+import com.farfarcoder.orderservice.business.model.OrderModel;
+import com.farfarcoder.orderservice.persistence.adapter.OrderPersistenceAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class OrderService {
 
-    private final OrderRepository orderRepository;
+    private final OrderPersistenceAdapter orderPersistenceAdapter;
 
-    public List<OrderResponse> getAllOrders() {
-        return orderRepository.findAll().stream()
-                .map(OrderResponse::from)
-                .collect(Collectors.toList());
+    public List<OrderModel> getAllOrders() {
+        return orderPersistenceAdapter.findAll();
     }
 
-    public OrderResponse getOrderById(Long id) {
-        Order order = orderRepository.findById(id)
+    public OrderModel getOrderById(Long id) {
+        return orderPersistenceAdapter.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
-        return OrderResponse.from(order);
     }
 
     @Transactional
-    public OrderResponse createOrder(OrderRequest request) {
-        Order order = Order.builder()
-                .customerName(request.getCustomerName())
-                .productName(request.getProductName())
-                .quantity(request.getQuantity())
-                .price(request.getPrice())
-                .status(request.getStatus())
-                .description(request.getDescription())
+    public OrderModel createOrder(OrderModel orderModel) {
+        // 비즈니스 로직: 총액 계산
+        orderModel.calculateTotalAmount();
+        return orderPersistenceAdapter.save(orderModel);
+    }
+
+    @Transactional
+    public OrderModel updateOrder(Long id, OrderModel updateInfo) {
+        OrderModel existingOrder = getOrderById(id);
+
+        // 비즈니스 로직: 업데이트 (불변 객체이므로 새로운 객체를 생성하여 저장해야 함)
+        // 여기서는 Builder를 사용하여 기존 객체 기반으로 새로운 객체 생성
+        OrderModel updatedOrder = OrderModel.builder()
+                .id(existingOrder.getId())
+                .customerName(existingOrder.getCustomerName()) // 고객명 변경 불가 정책이 있다면 유지
+                .productName(updateInfo.getProductName() != null ? updateInfo.getProductName()
+                        : existingOrder.getProductName())
+                .quantity(updateInfo.getQuantity() != null ? updateInfo.getQuantity() : existingOrder.getQuantity())
+                .price(updateInfo.getPrice() != null ? updateInfo.getPrice() : existingOrder.getPrice())
+                .status(updateInfo.getStatus() != null ? updateInfo.getStatus() : existingOrder.getStatus())
+                .description(updateInfo.getDescription() != null ? updateInfo.getDescription()
+                        : existingOrder.getDescription())
+                .createdAt(existingOrder.getCreatedAt())
                 .build();
 
-        Order savedOrder = orderRepository.save(order);
-        return OrderResponse.from(savedOrder);
-    }
+        // 총액 재계산
+        updatedOrder.calculateTotalAmount();
 
-    @Transactional
-    public OrderResponse updateOrder(Long id, OrderRequest request) {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
-
-        order.setCustomerName(request.getCustomerName());
-        order.setProductName(request.getProductName());
-        order.setQuantity(request.getQuantity());
-        order.setPrice(request.getPrice());
-        order.setStatus(request.getStatus());
-        order.setDescription(request.getDescription());
-
-        // 가격이나 수량이 변경되었으므로 총액 재계산 필요 (PreUpdate는 flush 시점에 실행됨)
-        if (request.getQuantity() != null && request.getPrice() != null) {
-            order.setTotalAmount(request.getPrice().multiply(java.math.BigDecimal.valueOf(request.getQuantity())));
-        }
-
-        Order updatedOrder = orderRepository.save(order);
-        return OrderResponse.from(updatedOrder);
+        return orderPersistenceAdapter.save(updatedOrder);
     }
 
     @Transactional
     public void deleteOrder(Long id) {
-        if (!orderRepository.existsById(id)) {
-            throw new RuntimeException("Order not found with id: " + id);
-        }
-        orderRepository.deleteById(id);
+        // 존재 확인
+        getOrderById(id);
+        orderPersistenceAdapter.deleteById(id);
     }
 
-    public List<OrderResponse> getOrdersByCustomerName(String customerName) {
-        return orderRepository.findByCustomerName(customerName).stream()
-                .map(OrderResponse::from)
-                .collect(Collectors.toList());
+    public List<OrderModel> getOrdersByCustomerName(String customerName) {
+        return orderPersistenceAdapter.findByCustomerName(customerName);
     }
 
-    public List<OrderResponse> getOrdersByStatus(Order.OrderStatus status) {
-        return orderRepository.findByStatus(status).stream()
-                .map(OrderResponse::from)
-                .collect(Collectors.toList());
+    public List<OrderModel> getOrdersByStatus(OrderModel.OrderStatus status) {
+        return orderPersistenceAdapter.findByStatus(status);
     }
 }

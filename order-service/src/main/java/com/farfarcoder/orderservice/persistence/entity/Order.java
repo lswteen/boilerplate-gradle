@@ -3,7 +3,7 @@ package com.farfarcoder.orderservice.persistence.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "orders")
-@Data
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class Order {
@@ -69,6 +69,18 @@ public class Order {
         if (quantity != null && price != null) {
             totalAmount = price.multiply(BigDecimal.valueOf(quantity));
         }
+    }
+
+    // Entity 수정을 위한 메서드
+    public void update(String customerName, String productName, Integer quantity, BigDecimal price, OrderStatus status,
+            String description) {
+        this.customerName = customerName;
+        this.productName = productName;
+        this.quantity = quantity;
+        this.price = price;
+        this.status = status;
+        this.description = description;
+        calculateTotalAmount();
     }
 
     public enum OrderStatus {
