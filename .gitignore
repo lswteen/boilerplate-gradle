@@ -47,3 +47,6 @@ out/
 *.mv.db
 *.trace.db
 data/
+
+# CVE 
+cve/
